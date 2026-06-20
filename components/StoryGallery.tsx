@@ -2,12 +2,12 @@ import Image from "next/image";
 import { Reveal } from "./Reveal";
 
 const PHOTOS = [
-  { file: "videollamada.jpeg", caption: "Las 6pm en Bogotá", city: "Madrid", rot: "-rotate-2" },
+  { file: "Videollamada.png", caption: "Las 6pm en Bogotá", city: "Madrid", rot: "-rotate-2" },
   { file: "cafe.jpg", caption: "Café como en casa", city: "Londres", rot: "rotate-1" },
   { file: "aeropuerto.jpeg", caption: "Listo para volver", city: "Tokio", rot: "-rotate-1" },
   { file: "diciembre.jpg", caption: "Diciembre lejos", city: "Melbourne", rot: "rotate-2" },
-  { file: "ruana.jpg", caption: "La ruana de mi abuela", city: "Berlín", rot: "rotate-1" },
-  { file: "pandebono.jpg", caption: "Pandebono cada mañana", city: "París", rot: "-rotate-2" },
+  { file: "mercado.jpeg", caption: "Los saboras de mi tierra", city: "Berlín", rot: "rotate-1" },
+  { file: "pandebono.jpeg", caption: "Pandebono cada mañana", city: "París", rot: "-rotate-2" },
 ] as const;
 
 export function StoryGallery() {

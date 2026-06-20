@@ -65,7 +65,7 @@ export function StatsSection() {
           Colombianos en el mundo · 2025
         </p>
         <h2 className="mt-3 max-w-[18ch] text-3xl text-white md:text-5xl">
-          Cada cifra es alguien que dejó su casa.
+         Cada cifra es alguien que está redefiniendo su nueva casa
         </h2>
         <span className="mt-4 block h-1.5 w-24 rounded-full bg-totto-yellow" />
 
