@@ -1,6 +1,7 @@
 export type Story = {
   id: string;
   author: string;
+  email?: string;
   city: string;
   country: string;
   lat: number;

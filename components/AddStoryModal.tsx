@@ -5,6 +5,7 @@ import { Microphone, Stop, X } from "@phosphor-icons/react";
 
 export type NewStory = {
   author: string;
+  email: string;
   city: string;
   message: string;
   voiceUrl?: string;
@@ -98,10 +99,11 @@ export function AddStoryModal({ open, lat, lng, onClose, onSubmit }: Props) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const author = String(data.get("author") ?? "").trim();
+    const email = String(data.get("email") ?? "").trim();
     const city = String(data.get("city") ?? "").trim();
     const message = String(data.get("message") ?? "").trim();
-    if (!author || !city || message.length < 8) return;
-    onSubmit({ author, city, message, voiceUrl });
+    if (!author || !email || !city || message.length < 8) return;
+    onSubmit({ author, email, city, message, voiceUrl });
     setVoiceUrl(undefined);
   }
 
@@ -156,6 +158,21 @@ export function AddStoryModal({ open, lat, lng, onClose, onSubmit }: Props) {
                 className="rounded-xl border border-home-brown/25 bg-sand/40 px-3 py-2.5 text-ink placeholder:text-ink-soft/60 focus:border-totto-red focus:outline-none focus:ring-2 focus:ring-totto-red/30"
               />
             </div>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="email" className="font-display text-sm font-bold text-ink">
+              Tu correo electrónico
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              placeholder="tu@correo.com"
+              className="rounded-xl border border-home-brown/25 bg-sand/40 px-3 py-2.5 text-ink placeholder:text-ink-soft/60 focus:border-totto-red focus:outline-none focus:ring-2 focus:ring-totto-red/30"
+            />
           </div>
 
           <div className="flex flex-col gap-1.5">

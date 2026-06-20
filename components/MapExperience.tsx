@@ -22,7 +22,7 @@ const InteractiveMap = dynamic(() => import("./InteractiveMap"), {
 
 type StoredStory = Pick<
   Story,
-  "id" | "author" | "city" | "lat" | "lng" | "message"
+  "id" | "author" | "email" | "city" | "lat" | "lng" | "message"
 >;
 
 export function MapExperience() {
@@ -78,6 +78,7 @@ export function MapExperience() {
     const story: Story = {
       id: `user-${Date.now()}`,
       author: data.author,
+      email: data.email,
       city: data.city,
       country: "",
       lat: pending.lat,
@@ -92,9 +93,10 @@ export function MapExperience() {
 
     try {
       const toStore: StoredStory[] = next.map(
-        ({ id, author, city, lat, lng, message }) => ({
+        ({ id, author, email, city, lat, lng, message }) => ({
           id,
           author,
+          email,
           city,
           lat,
           lng,

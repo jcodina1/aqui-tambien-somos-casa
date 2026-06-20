@@ -2,12 +2,12 @@ import Image from "next/image";
 import { Reveal } from "./Reveal";
 
 const PHOTOS = [
-  { file: "videollamada", caption: "Las 6pm en Bogotá", city: "Madrid", rot: "-rotate-2" },
-  { file: "cafe", caption: "Café como en casa", city: "Londres", rot: "rotate-1" },
-  { file: "aeropuerto", caption: "Listo para volver", city: "Tokio", rot: "-rotate-1" },
-  { file: "diciembre", caption: "Diciembre lejos", city: "Melbourne", rot: "rotate-2" },
-  { file: "ruana", caption: "La ruana de mi abuela", city: "Berlín", rot: "rotate-1" },
-  { file: "pandebono", caption: "Pandebono cada mañana", city: "París", rot: "-rotate-2" },
+  { file: "videollamada.jpeg", caption: "Las 6pm en Bogotá", city: "Madrid", rot: "-rotate-2" },
+  { file: "cafe.jpg", caption: "Café como en casa", city: "Londres", rot: "rotate-1" },
+  { file: "aeropuerto.jpeg", caption: "Listo para volver", city: "Tokio", rot: "-rotate-1" },
+  { file: "diciembre.jpg", caption: "Diciembre lejos", city: "Melbourne", rot: "rotate-2" },
+  { file: "ruana.jpg", caption: "La ruana de mi abuela", city: "Berlín", rot: "rotate-1" },
+  { file: "pandebono.jpg", caption: "Pandebono cada mañana", city: "París", rot: "-rotate-2" },
 ] as const;
 
 export function StoryGallery() {
@@ -32,7 +32,7 @@ export function StoryGallery() {
                 <span className="tape left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 -rotate-3 rounded-[1px]" aria-hidden />
                 <div className="relative aspect-[4/5] w-full overflow-hidden bg-sand-deep">
                   <Image
-                    src={`/images/galeria/${p.file}.jpg`}
+                    src={`/images/galeria/${p.file}`}
                     alt={p.caption}
                     fill
                     sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 300px"

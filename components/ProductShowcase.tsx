@@ -8,7 +8,7 @@ export function ProductShowcase() {
         <Reveal>
           <div className="relative aspect-[4/3] overflow-hidden rounded-card shadow-[0_30px_60px_-25px_rgba(0,0,0,0.55)]">
             <Image
-              src="/images/morral.jpg"
+              src="/images/morral.jpeg"
               alt="Morral Totto sobre los hombros de un viajero colombiano"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
