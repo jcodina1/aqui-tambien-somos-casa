@@ -12,8 +12,8 @@ export default function Page() {
       <Nav />
       <main>
         <Hero />
-        <ValuePillars />
         <StatsSection />
+        <ValuePillars />
         <StoryGallery />
         <ProductShowcase />
       </main>
