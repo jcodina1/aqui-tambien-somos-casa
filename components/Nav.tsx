@@ -9,6 +9,7 @@ const LINKS = [
   { href: "#historias", label: "Historias" },
   { href: "#comunidad", label: "La comunidad" },
   { href: "#morral", label: "El morral" },
+  { href: "#actividades", label: "Eventos" },
 ];
 
 export function Nav() {
@@ -53,7 +54,7 @@ export function Nav() {
         </a>
 
         {/* Enlaces desktop - una sola línea */}
-        <div className="hidden items-center gap-8 lg:flex">
+        <div className="hidden items-center gap-6 lg:flex">
           {LINKS.map((l) => (
             <a
               key={l.href}
