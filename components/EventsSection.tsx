@@ -1,5 +1,6 @@
 import Image from "next/image";
 import {
+  ArrowUpRight,
   CalendarBlank,
   CheckCircle,
   Clock,
@@ -7,7 +8,6 @@ import {
   UsersThree,
 } from "@phosphor-icons/react/dist/ssr";
 import { Reveal } from "./Reveal";
-import { RegistrationForm } from "./RegistrationForm";
 
 const DETAILS = [
   {
@@ -139,15 +139,27 @@ export function EventsSection() {
                 </div>
               </div>
 
-              {/* Formulario de reserva */}
-              <div className="border-t border-white/10 bg-white/[0.05] p-8 md:p-12 lg:border-l lg:border-t-0">
+              {/* Llamado a conocer más */}
+              <div className="flex flex-col justify-center gap-5 border-t border-white/10 bg-white/[0.05] p-8 md:p-12 lg:border-l lg:border-t-0">
                 <p className="font-hand text-3xl leading-tight text-totto-yellow">
                   ¡Ven a conectar con tu gente!
                 </p>
-                <p className="mb-5 mt-1 text-sm text-white/65">
-                  Déjanos tus datos y aseguramos tu lugar en la playa.
+                <p className="text-white/70">
+                  Mira todos los detalles del encuentro, lo que incluye y cómo
+                  reservar tu cupo.
                 </p>
-                <RegistrationForm />
+                <a
+                  href="/images/eventos/flyer.png"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-totto-red px-7 py-4 font-display text-base font-extrabold text-white shadow-[0_14px_30px_-10px_rgba(246,48,62,0.8)] transition-transform hover:-translate-y-[1px] active:translate-y-0"
+                >
+                  Conoce más
+                  <ArrowUpRight size={20} weight="bold" />
+                </a>
+                <p className="font-mono text-xs uppercase tracking-[0.16em] text-totto-yellow">
+                  Cupos limitados
+                </p>
               </div>
             </div>
           </article>
