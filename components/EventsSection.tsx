@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import {
   ArrowUpRight,
@@ -49,6 +52,8 @@ const INCLUYE = [
 ];
 
 export function EventsSection() {
+  const [showQr, setShowQr] = useState(false);
+
   return (
     <section id="actividades" className="paper-grain bg-sand py-20 lg:py-28">
       <div className="mx-auto max-w-[1400px] px-5 lg:px-8">
@@ -166,9 +171,34 @@ export function EventsSection() {
         </Reveal>
 
         <Reveal delay={0.15}>
-          <p className="mt-8 text-center font-hand text-2xl text-home-brown">
-            Pronto, más encuentros en otras ciudades del mundo.
-          </p>
+          <div className="mt-8 flex flex-col items-center gap-6">
+            <p className="text-center font-hand text-2xl text-home-brown">
+              Próximamente más encuentros en Estados Unidos y España.
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowQr((value) => !value)}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-totto-red px-7 py-4 font-display text-base font-extrabold text-white shadow-[0_14px_30px_-10px_rgba(246,48,62,0.8)] transition-transform hover:-translate-y-[1px] active:translate-y-0"
+              aria-expanded={showQr}
+            >
+              Únete a nuestra comunidad
+              <ArrowUpRight size={20} weight="bold" />
+            </button>
+            {showQr && (
+              <div className="flex flex-col items-center gap-3 rounded-3xl bg-white p-5 shadow-[0_20px_45px_-20px_rgba(0,0,0,0.35)]">
+                <Image
+                  src="/images/eventos/qr-comunidad.jpeg"
+                  alt="Código QR para unirte a nuestra comunidad"
+                  width={220}
+                  height={220}
+                  className="h-[220px] w-[220px] rounded-2xl object-contain"
+                />
+                <p className="font-mono text-xs uppercase tracking-[0.16em] text-home-brown">
+                  Escanea para unirte
+                </p>
+              </div>
+            )}
+          </div>
         </Reveal>
       </div>
     </section>
