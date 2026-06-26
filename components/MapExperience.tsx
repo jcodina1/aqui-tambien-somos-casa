@@ -6,7 +6,11 @@ import { MapPin, PushPin } from "@phosphor-icons/react";
 import { SEED_STORIES, type Story } from "@/lib/stories";
 import { AddStoryModal, type NewStory } from "./AddStoryModal";
 
-const STORAGE_KEY = "atsc:historias";
+/** Historia tal como la devuelve el API (sin correo). */
+type ApiStory = Pick<
+  Story,
+  "id" | "author" | "city" | "lat" | "lng" | "message"
+>;
 
 const InteractiveMap = dynamic(() => import("./InteractiveMap"), {
   ssr: false,
@@ -20,14 +24,11 @@ const InteractiveMap = dynamic(() => import("./InteractiveMap"), {
   ),
 });
 
-type StoredStory = Pick<
-  Story,
-  "id" | "author" | "email" | "city" | "lat" | "lng" | "message"
->;
-
 export function MapExperience() {
   const [userStories, setUserStories] = useState<Story[]>([]);
   const [placing, setPlacing] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState<{ lat: number; lng: number } | null>(
     null,
   );
@@ -37,18 +38,23 @@ export function MapExperience() {
     key: number;
   } | null>(null);
 
+  // Cargar las banderitas de la comunidad desde la base (Turso).
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as StoredStory[];
+    const controller = new AbortController();
+    fetch("/api/stories", { signal: controller.signal })
+      .then((res) => (res.ok ? res.json() : Promise.reject(res)))
+      .then((data: { stories: ApiStory[] }) => {
         setUserStories(
-          parsed.map((s) => ({ ...s, country: "", fromUser: true })),
+          data.stories.map((s) => ({ ...s, country: "", fromUser: true })),
         );
-      }
-    } catch {
-      /* almacenamiento no disponible: seguimos solo con las semilla */
-    }
+      })
+      .catch((err) => {
+        if (err?.name !== "AbortError") {
+          // Sin conexión a la base: el mapa sigue con las historias semilla.
+          console.error("No se pudieron cargar las historias:", err);
+        }
+      });
+    return () => controller.abort();
   }, []);
 
   // El botón del navbar dispara este evento para activar el modo "poner banderita".
@@ -73,41 +79,50 @@ export function MapExperience() {
     setPlacing(false);
   }
 
-  function handleAddStory(data: NewStory) {
-    if (!pending) return;
-    const story: Story = {
-      id: `user-${Date.now()}`,
-      author: data.author,
-      email: data.email,
-      city: data.city,
-      country: "",
-      lat: pending.lat,
-      lng: pending.lng,
-      message: data.message,
-      voiceUrl: data.voiceUrl,
-      fromUser: true,
-    };
-    const next = [...userStories, story];
-    setUserStories(next);
-    setFocus({ lat: story.lat, lng: story.lng, key: Date.now() });
+  async function handleAddStory(data: NewStory) {
+    if (!pending || submitting) return;
+    setSubmitting(true);
+    setError(null);
 
     try {
-      const toStore: StoredStory[] = next.map(
-        ({ id, author, email, city, lat, lng, message }) => ({
-          id,
-          author,
-          email,
-          city,
-          lat,
-          lng,
-          message,
+      const res = await fetch("/api/stories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          author: data.author,
+          email: data.email,
+          city: data.city,
+          message: data.message,
+          lat: pending.lat,
+          lng: pending.lng,
         }),
+      });
+
+      if (!res.ok) {
+        const payload = (await res.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        throw new Error(payload?.error ?? "No se pudo guardar tu banderita.");
+      }
+
+      const { story: saved } = (await res.json()) as { story: ApiStory };
+      // El audio de voz no se persiste; se conserva solo en esta sesión.
+      const story: Story = {
+        ...saved,
+        country: "",
+        voiceUrl: data.voiceUrl,
+        fromUser: true,
+      };
+      setUserStories((prev) => [...prev, story]);
+      setFocus({ lat: story.lat, lng: story.lng, key: Date.now() });
+      setPending(null);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "No se pudo guardar tu banderita.",
       );
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore));
-    } catch {
-      /* sin persistencia: la historia vive en esta sesión */
+    } finally {
+      setSubmitting(false);
     }
-    setPending(null);
   }
 
   return (
@@ -150,7 +165,13 @@ export function MapExperience() {
         open={pending !== null}
         lat={pending?.lat ?? null}
         lng={pending?.lng ?? null}
-        onClose={() => setPending(null)}
+        submitting={submitting}
+        error={error}
+        onClose={() => {
+          if (submitting) return;
+          setError(null);
+          setPending(null);
+        }}
         onSubmit={handleAddStory}
       />
     </div>

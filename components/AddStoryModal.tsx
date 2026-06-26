@@ -15,13 +15,23 @@ type Props = {
   open: boolean;
   lat: number | null;
   lng: number | null;
+  submitting?: boolean;
+  error?: string | null;
   onClose: () => void;
   onSubmit: (story: NewStory) => void;
 };
 
 const MAX_SECONDS = 15;
 
-export function AddStoryModal({ open, lat, lng, onClose, onSubmit }: Props) {
+export function AddStoryModal({
+  open,
+  lat,
+  lng,
+  submitting = false,
+  error = null,
+  onClose,
+  onSubmit,
+}: Props) {
   const [voiceUrl, setVoiceUrl] = useState<string>();
   const [recording, setRecording] = useState(false);
   const [seconds, setSeconds] = useState(0);
@@ -86,6 +96,7 @@ export function AddStoryModal({ open, lat, lng, onClose, onSubmit }: Props) {
       stopRecording();
       stopTracks();
       setSeconds(0);
+      setVoiceUrl(undefined);
     }
     return () => {
       stopTracks();
@@ -104,7 +115,6 @@ export function AddStoryModal({ open, lat, lng, onClose, onSubmit }: Props) {
     const message = String(data.get("message") ?? "").trim();
     if (!author || !email || !city || message.length < 8) return;
     onSubmit({ author, email, city, message, voiceUrl });
-    setVoiceUrl(undefined);
   }
 
   return (
@@ -220,11 +230,21 @@ export function AddStoryModal({ open, lat, lng, onClose, onSubmit }: Props) {
             Ubicación seleccionada: {lat?.toFixed(2)}, {lng?.toFixed(2)}
           </p>
 
+          {error && (
+            <p
+              role="alert"
+              className="rounded-xl bg-totto-red/10 px-3 py-2 text-sm font-bold text-totto-red"
+            >
+              {error}
+            </p>
+          )}
+
           <button
             type="submit"
-            className="rounded-full bg-totto-red px-6 py-3 font-display text-base font-extrabold text-white shadow-[0_12px_28px_-10px_rgba(246,48,62,0.8)] transition-transform hover:-translate-y-[1px] active:translate-y-0"
+            disabled={submitting}
+            className="rounded-full bg-totto-red px-6 py-3 font-display text-base font-extrabold text-white shadow-[0_12px_28px_-10px_rgba(246,48,62,0.8)] transition-transform hover:-translate-y-[1px] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
           >
-            Clavar mi banderita
+            {submitting ? "Guardando..." : "Clavar mi banderita"}
           </button>
         </form>
       </div>
